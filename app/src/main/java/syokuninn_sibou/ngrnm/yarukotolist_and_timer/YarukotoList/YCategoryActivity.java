@@ -34,7 +34,7 @@ import syokuninn_sibou.ngrnm.yarukotolist_and_timer.R;
  * やることリストの「カテゴリタイル（カテゴリ選択）画面」
  * タイマーへは、タイマーセット画面へのリンクのみ
  */
-public class YCategoryActivity extends AppCompatActivity {
+public class YCategoryActivity extends ClassifiedActivity {
     private static final String kind = "Category";
     Context context;
     
@@ -54,13 +54,6 @@ public class YCategoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
-        /* GridView 描画の準備 */
-        context = getApplicationContext();
-        Consts.rootPath = context.getFilesDir().getPath() + "/";
-        Consts.libraryRootPath = Consts.rootPath + "YList/";
-        // DirFile の初期化（ルートディレクトリの設定）
-        DirFile.setDirFile(Consts.rootPath);
         
         // Category.list に登録されているカテゴリーのデータフォルダ
         //  が本当に存在しているかをまず確認。

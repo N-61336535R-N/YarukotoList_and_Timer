@@ -39,7 +39,7 @@ import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Utils.MoldDialo
  * 
  */
 
-public class YListerActivity extends AppCompatActivity {
+public class YListerActivity extends ClassifiedActivity {
     private static final String kind = "Lists";
     
     private LibraryChecker CC;
