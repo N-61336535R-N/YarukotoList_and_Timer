@@ -6,11 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".YItemEditActivity">
+    tools:context=".YarukotoList.YItemEditActivity">
 
     
     <TextView
-        android:text="タイトル"
+        android:title="タイトル"
         android:textSize="10sp"
         android:textColor="#940d792d"
         android:gravity="bottom|right"
@@ -32,7 +32,7 @@
 
     
     <TextView
-        android:text="概要"
+        android:title="概要"
         android:textSize="10sp"
         android:textColor="#940d792d"
         android:gravity="bottom|right"
@@ -56,7 +56,7 @@
 
     
     <TextView
-        android:text="詳細"
+        android:title="詳細"
         android:textSize="10sp"
         android:textColor="#940d792d"
         android:gravity="bottom|right"

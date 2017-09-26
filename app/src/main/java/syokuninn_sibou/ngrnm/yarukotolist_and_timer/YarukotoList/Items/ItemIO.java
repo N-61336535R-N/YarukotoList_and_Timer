@@ -26,7 +26,7 @@ public class ItemIO {
     
     
     public static boolean check() {
-        String ItemPath = Consts.rootPath + Consts.categoryName +"/" + Consts.listName+"/" + Consts.ItemNumber;
+        String ItemPath = Consts.rootPath + Consts.libraryName +"/" + Consts.listName+"/" + Consts.ItemNumber;
         ItemFs[0] = new File(ItemPath +".Item");  // ８コードに移行後に使う予定
         ItemFs[1] = new File(ItemPath +"[summary].Item");
         ItemFs[2] = new File(ItemPath +"[detail].Item");
@@ -34,7 +34,7 @@ public class ItemIO {
         
         boolean problem = false;
         // なければ作る
-        new File(Consts.rootPath + Consts.categoryName +"/" + Consts.listName+"/").mkdirs();
+        new File(Consts.rootPath + Consts.libraryName +"/" + Consts.listName+"/").mkdirs();
         for (File ItemF : ItemFs) {
             if (!ItemF.exists()) {
                 try {

@@ -42,6 +42,10 @@ import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Utils.MoldDialo
 public class YItemsActivity extends AppCompatActivity {
     private static final String kind = "Item";
     
+    private ItemsChecker ItC;
+    private ItemsChecker FItC;
+    
+    
     // 最初のリスト：カテゴリクリック時に、そのカテゴリの固有IDを取得
     //                              → その固有IDを元に、リストファイルから項目を取得
     /** 起動を早くするために、一度項目を取得したリストは一定期間保持し続けるスタイルに
@@ -60,8 +64,8 @@ public class YItemsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_yitems);
     
         // 初期値読み込み
-        ItemsChecker ItCheck = new ItemsChecker("list");  // リスト内容
-        ItemsChecker FItCheck = new ItemsChecker("finish");  // 終了リストの内容
+        ItC = new ItemsChecker("list");  // リスト内容
+        FItC = new ItemsChecker("finish");  // 終了リストの内容
         // リストビュー
         mListView = (EnhancedListView) findViewById(R.id.listview1);
     
@@ -74,7 +78,7 @@ public class YItemsActivity extends AppCompatActivity {
                 // 選択アイテムを取得
                 ListView listView = (ListView)parent;
                 String item = (String)listView.getItemAtPosition(pos);
-                Toast.makeText(YItemsActivity.this, item, Toast.LENGTH_LONG).show();
+                //Toast.makeText(YItemsActivity.this, item, Toast.LENGTH_LONG).show();
                 /**(未)
                  * 次のintentに移動
                  * [実験] Preference.java に飛ぶ
@@ -95,10 +99,10 @@ public class YItemsActivity extends AppCompatActivity {
             }
         });
         
-        /* スワイプで消す（終了リストに追加する）設定
-          *  追加削除をその都度やっていたら、負担が大きいので、
-          *  追加削除をするのはリストだけ。
-          *  画面遷移するタイミングでファイルを更新。
+        /* スワイプで 終了リストに移動する 設定
+          *  追加削除をその都度やっていたら 負担が大きいので、
+          *  追加削除を一旦、リスト内で"仮想的に"行う。
+          *  ファイルを更新は画面遷移するタイミングで。
         */
         mListView.setDismissCallback(new de.timroes.android.listview.EnhancedListView.OnDismissCallback() {
             @Override
@@ -139,7 +143,6 @@ public class YItemsActivity extends AppCompatActivity {
     
     
     
-    private ItemsChecker ItC = new ItemsChecker("aaa");
     
     // ↗︎ オプションメニューの中身設定
     @Override

@@ -1,6 +1,7 @@
 package syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library;
 
 
+import java.util.ArrayList;
 
 public class Consts {
     private Consts(){}
@@ -13,9 +14,19 @@ public class Consts {
     public static final int LIMIT_histry = 10;
     
     // 画像などのファイルの保管場所のパス
-    public static String rootPath;    // context.getFilesDir().getPath() + "/"
+    public static String rootPath;    // context.getFilesDir().getPath() + "/" で固定。
     public static String libraryRootPath;    // context.getFilesDir().getPath() + "/YList/"
-    public static String categoryName, listName;   // 末尾に "/" を加えることを忘れないように。
+    public static ArrayList<String> libraryName = new ArrayList<>();   // 末尾に "/" はつけない。基本、combinePath() とセットで使う
+    public static String listName;   // 末尾に "/" を加えることを忘れないように。
     public static int ItemNumber;   // アイテムのファイル名は通し番号で管理するので、識別子は整数。
     
+    
+    
+    public static String combinePath(ArrayList<String> libraryName){
+        StringBuilder s = new StringBuilder("");
+        for(String libN : libraryName){
+            s.append(libN).append("/");
+        }
+        return s.toString();
+    }
 }

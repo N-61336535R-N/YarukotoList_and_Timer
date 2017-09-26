@@ -10,7 +10,7 @@
         android:layout_marginLeft="30dp"
         android:layout_gravity="center"
         android:textSize="18dp"
-        android:text="開始日" />
+        android:title="開始日" />
     <NumberPicker
         android:id="@+id/numberPicker"
         android:layout_width="wrap_content"

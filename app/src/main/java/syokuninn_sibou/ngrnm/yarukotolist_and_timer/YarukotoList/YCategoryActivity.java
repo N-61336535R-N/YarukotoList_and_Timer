@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,66 +26,55 @@ import syokuninn_sibou.ngrnm.yarukotolist_and_timer.Timer.*;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.*;
 
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.R;
+import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.Lists.ViewData;
+
 
 
 /**
  *  ＜＜＜＜＜〜〜〜〜〜  やることカテゴリ一覧（独立画面ver）  〜〜〜〜〜＞＞＞＞＞
  * やることリストの「カテゴリタイル（カテゴリ選択）画面」
  * タイマーへは、タイマーセット画面へのリンクのみ
+ * 
+ * 
+ * ■ VDatas が用意できれば、画面描画はできる。
  */
-public class YCategoryActivity extends ClassifiedActivity {
+public class YCategoryActivity extends LibraryActivity {
     private static final String kind = "Category";
-    Context context;
-    
-    private class BindData {
-        String imagePath;
-        String title;
-        
-        BindData(String impath, String title) {
-            this.imagePath= impath;
-            this.title = title;
-        }
+    @Override protected String getKind() {
+        return kind;
     }
-    private BindData[] mDatas;
+    
+    private LibraryChecker LibC;
+    @Override protected LibraryChecker getLibC() {
+        return LibC;
+    }
+    @Override protected void setLibC(LibraryChecker LibC) {
+        this.LibC = LibC;
+    }
+    
+    @Override protected AdapterView getAView() {
+        return gV;
+    }
+    
+    @Override protected Context getThisActivity() {
+        return YCategoryActivity.this;
+    }
     
     
+    
+    private ViewData[] VDatas;
+    GridView gV;
+    
+    
+    @Override protected int getLayoutResID() {
+        return R.layout.activity_ycategory;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         
-        // Category.list に登録されているカテゴリーのデータフォルダ
-        //  が本当に存在しているかをまず確認。
-        // （なければ作る。あれば、CCがCategory.listの読み込み媒体になる）
-        LibraryChecker CC = new LibraryChecker(kind);
-        CC.check();
-    
-    
-        // デフォルト画像が準備できてない（No_Image.pngがない）場合は、
-        // セッティングし直す。
-        String NoImage = CC.ImgDirPath() + "No_Image.png";
-        if (!new File(NoImage).exists()) {
-            setAllImage("defaultImages", CC.ImgDirPath());
-        }
-    
-        // GridView に表示する項目の登録
-        int test = CC.getKind_num();
-        mDatas = new BindData[test];
-        for (int i=0; i<CC.getKind_num(); i++) {
-            mDatas[i] = new BindData(NoImage,  CC.getNames().get(i));
-        }
-        
-    
-        // GridViewのインスタンスを生成
-        GridView gridview = (GridView) findViewById(R.id.gridview);
-        // BaseAdapter を継承したGridAdapterのインスタンスを生成
-        // 子要素のレイアウトファイル grid_items.xml を activity_main.xml に inflate するためにGridAdapterに引数として渡す
-        GridAdapter adapter = new GridAdapter(this.getApplicationContext(), R.layout.grid_items, mDatas);
-        // gridViewにadapterをセット
-        gridview.setAdapter(adapter);
-        
-        // gridViewのボタンの設定
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // gVのボタンの設定
+        gV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 /*                String message = position + "番目が選択されました。";
                 Toast.makeText(YCategoryActivity.this, message, Toast.LENGTH_LONG).show();*/
@@ -102,34 +90,40 @@ public class YCategoryActivity extends ClassifiedActivity {
                 // やることリスト（編集）画面に移動
                 Intent intent = new Intent(YCategoryActivity.this, YListerActivity.class);
                 //intent.putExtra("ListPath", List_Datas[1][position]);
-                Consts.categoryName = mDatas[position].title;
-                //ntent.putExtra("CategoryName", mDatas[position].title);
+                // Stack に、ディレクトリ名のみ保存
+                Consts.libraryName.add( VDatas[position].getTitle() );
+                //ntent.putExtra("CategoryName", VDatas[position].title);
                 startActivity(intent);
             }
         });
         
-        
-        //  タイマー設定画面に移動するためのボタン(↓の横長ボタン)
-        Button sendButton = (Button) findViewById(R.id.send_button);
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(YCategoryActivity.this, TimerSetActivity.class);
-                startActivity(intent);
-            }
-        });
-        // FloatingActionButton（↘︎のタイマーアイコン）
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // やることリスト（編集）画面に移動
-                Intent intent = new Intent(YCategoryActivity.this, TimerActivity.class);
-                startActivity(intent);
-            }
-        });
     }
     
+    @Override
+    protected void updateListView() {
+        // デフォルト画像が準備できてない（No_Image.pngがない）場合は、
+        // セッティングし直す。
+        String NoImage = LibC.ImgDirPath() + "No_Image.png";
+        if (!new File(NoImage).exists()) {
+            setAllImage("No_Image", LibC.ImgDirPath());
+        }
+    
+        // GridView に表示する項目の登録
+        int test = LibC.getKind_num();
+        VDatas = new ViewData[test];
+        for (int i = 0; i< LibC.getKind_num(); i++) {
+            VDatas[i] = new ViewData(NoImage,  LibC.getNames().get(i));
+        }
+    
+    
+        // GridViewのインスタンスを生成
+        gV = (GridView) findViewById(R.id.gridview);
+        // BaseAdapter を継承したGridAdapterのインスタンスを生成
+        // 子要素のレイアウトファイル grid_items.xml を activity_ycategory.xmlry.xml に inflate するためにGridAdapterに引数として渡す
+        GridAdapter adapter = new GridAdapter(this.getApplicationContext(), R.layout.grid_items, VDatas);
+        // gVにadapterをセット
+        gV.setAdapter(adapter);
+    }
     
     
     
@@ -168,12 +162,12 @@ public class YCategoryActivity extends ClassifiedActivity {
         TextView textView;
     }
     
-    // ArrayAdapter<BindData> を継承した GridAdapter クラスのインスタンス生成
-    private class GridAdapter extends ArrayAdapter<BindData> {
+    // ArrayAdapter<ViewData> を継承した GridAdapter クラスのインスタンス生成
+    private class GridAdapter extends ArrayAdapter<ViewData> {
         private LayoutInflater inflater;
         private int layoutId;
     
-        public GridAdapter(Context context, int layoutId, BindData[] objects) {
+        public GridAdapter(Context context, int layoutId, ViewData[] objects) {
             super(context, 0, objects);
             this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             this.layoutId = layoutId;
@@ -195,9 +189,9 @@ public class YCategoryActivity extends ClassifiedActivity {
                 holder = (ViewHolder) convertView.getTag();
             }
             
-            BindData data = getItem(position);
-            holder.textView.setText(data.title);
-            Bitmap bmp = BitmapFactory.decodeFile(data.imagePath);
+            ViewData data = getItem(position);
+            holder.textView.setText(data.getTitle());
+            Bitmap bmp = BitmapFactory.decodeFile(data.getImagePath());
             holder.imageView.setImageBitmap(bmp);
         
             return convertView;

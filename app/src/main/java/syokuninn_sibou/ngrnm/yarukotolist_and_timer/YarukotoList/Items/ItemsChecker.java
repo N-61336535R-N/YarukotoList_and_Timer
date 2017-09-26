@@ -10,6 +10,9 @@ import java.util.List;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.Consts;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.DirFile;
 
+import static syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.Consts.libraryName;
+
+
 /**
  * Created by M.R on 2017/06/20.
  * 
@@ -35,10 +38,22 @@ public class ItemsChecker extends Checker {
      * @param mode
      */
     public ItemsChecker(String mode) {
-        kPath = Consts.libraryRootPath + Consts.categoryName + "/" + Consts.listName + "/";
-        kindDir = new File(kPath);
+        super(mode);
+    }
     
+    @Override
+    protected void determPath(String mode) {
+        kPath = Consts.libraryRootPath + Consts.combinePath(libraryName) + Consts.listName + "/";
+        // 「やったことリスト」の保存場所は、それぞれの Items のディレクトリの中の「fin」ディレクトリの中
+        if (mode.equals("finish")) {
+            kPath += "fin/";
+        }
+        kindDir = new File(kPath);
         Item_list = new File(kPath + "Item.list");
+    }
+    
+    @Override
+    public void check() {
         /**
          * Item.list がなかった場合は、初期化処理
          */
@@ -64,23 +79,25 @@ public class ItemsChecker extends Checker {
             List<String> fileList;
             int fileNum;
             StringBuilder sb = new StringBuilder();
-            if ((fileNum = (fileList = getFileList(kindDir)).size()) > 0) {
+            // Item.list ファイルの分はノーカウント
+            if ((fileNum=(fileList=getFileList(kindDir)).size()-1) > 0) {
                 if (fileNum > Consts.LIMIT_Items) {
                     kind_num = Consts.LIMIT_Items;
                 } else {
                     kind_num = fileNum;
                 }
                 for (int i = 0; i < kind_num; i++) {
-                    sb.append(fileList.get(i));
+                    // Item.list ファイルの分はノーカウント
+                    if (!fileList.get(i).endsWith(".list")) sb.append(fileList.get(i));
                     if (i != kind_num - 1) sb.append("\n");
                 }
             } else {
                 sb.append("項目タイトル");
             }
             DirFile.writeAll(Item_list, sb.toString());
-    
-        }
         
+        }
+    
         // ○Item.list のタイトル一覧を（リストで）取得
         Titles = new ArrayList<>(Arrays.asList(DirFile.readAll(Item_list).split("\n", -1)));  // 自由に追加できるようにミュータブルに。
         // もし項目数制限にかかっていたら、それ以降を削除
@@ -93,7 +110,7 @@ public class ItemsChecker extends Checker {
         } else {
             kind_num = kn;
         }
-        
+    
         // アイテムファイルがなければ作る。ファイル名は、通し番号（Items画面で表示する順番）に対応
         for (int i = 0; i < kind_num; i++) {
             if (!(checkF = new File(kPath + i + "[summary].list")).exists())
@@ -101,16 +118,6 @@ public class ItemsChecker extends Checker {
             if (!(checkF = new File(kPath + i + "[detail].list")).exists())
                 createNotFoundFile(checkF);
         }
-    }
-    
-    @Override
-    protected void determPath() {
-        
-    }
-    
-    @Override
-    public void check() {
-        
     }
     
     private static List<String> getFileList(File Dir) {

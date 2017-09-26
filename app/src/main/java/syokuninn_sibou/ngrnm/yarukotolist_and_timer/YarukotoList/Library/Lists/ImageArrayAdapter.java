@@ -15,13 +15,13 @@ import syokuninn_sibou.ngrnm.yarukotolist_and_timer.R;
 
 
 
-public class ImageArrayAdapter extends ArrayAdapter<ListItem> {
+public class ImageArrayAdapter extends ArrayAdapter<ViewData> {
     
     private int resourceId;
-    private List<ListItem> items;
+    private List<ViewData> items;
     private LayoutInflater inflater;
     
-    public ImageArrayAdapter(Context context, int resourceId, List<ListItem> items) {
+    public ImageArrayAdapter(Context context, int resourceId, List<ViewData> items) {
         super(context, resourceId, items);
         
         this.resourceId = resourceId;
@@ -38,11 +38,11 @@ public class ImageArrayAdapter extends ArrayAdapter<ListItem> {
             view = this.inflater.inflate(this.resourceId, null);
         }
         
-        ListItem item = this.items.get(position);
+        ViewData item = this.items.get(position);
         
         // テキストをセット
         TextView appInfoText = (TextView)view.findViewById(R.id.item_text);
-        appInfoText.setText(item.getText());
+        appInfoText.setText(item.getTitle());
         
         // サムネイルをセット
         ImageView appInfoImage = (ImageView) view.findViewById(R.id.item_image);

@@ -22,7 +22,7 @@ import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.YListerActivity
 public class TimerActivity extends AppCompatActivity {
     // タイマー
     private Button startButton, stopButton;
-    private TextView timerText;  // .setText("");した段階で、画面に表示される
+    private TextView timerText;  // .setTitle("");した段階で、画面に表示される
     
     private static CountDown countDown;
     private static List<CountDown> countDownList;
@@ -76,7 +76,7 @@ public class TimerActivity extends AppCompatActivity {
             public boolean onLongClick(View v) {
                 countDown.cancel(); // タイマーをストップ
                 millisLeft = 15000; // カウントダウン時間を初期値にリセット
-                ((TextView)findViewById(R.id.textView)).setText(String.valueOf(millisLeft / 1000)); // テキストビューに初期値をセット
+                ((TextView)findViewById(R.id.textView)).setTitle(String.valueOf(millisLeft / 1000)); // テキストビューに初期値をセット
                 ((ToggleButton)findViewById(R.id.toggleButton)).setChecked(false); // toggleボタンをオフにする
                 return true;
             }

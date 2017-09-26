@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".YItemsActivity">
+    tools:context=".YarukotoList.YItemsActivity">
 
     <RelativeLayout 
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -31,7 +31,7 @@
 
         <Button
             android:id="@+id/send_button"
-            android:text="タイマー予約へ"
+            android:title="タイマー予約へ"
             android:textSize="20sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

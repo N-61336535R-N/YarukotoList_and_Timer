@@ -5,11 +5,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Items.Checker;
+
 /**
  * Created by M.R on 2017/06/04.
  */
 
-public class LibraryChecker {
+public class LibraryChecker extends Checker {
     private List<String> Names, ImgNames;
     private String kind;  // "Category" or "Lists" or "Item"
     private int LIMIT_kind;
@@ -18,7 +20,13 @@ public class LibraryChecker {
     private String kindDirPath;
     private String imgDirPath;
     
+    
     public LibraryChecker(String kind) {
+        super(kind);
+    }
+    
+    @Override
+    protected void determPath(String kind) {
         // rootDir には、context.getFilesDir().getPath() + "/カテゴリ名" + "/リスト名"
         // (今いる位置（階層）のタイトルまでを、rootDirの末尾に追加して渡す。)
         this.kind = kind;
@@ -29,14 +37,14 @@ public class LibraryChecker {
                 break;
             case "Lists":
                 LIMIT_kind = Consts.LIMIT_Lists;
-                kindDirPath = Consts.libraryRootPath + Consts.categoryName + "/";
+                kindDirPath = Consts.libraryRootPath + Consts.combinePath(Consts.libraryName);
                 break;
         }
         this.imgDirPath = Consts.rootPath + kind + "_imgs/";
     }
     
-    
-    public boolean check() {
+    @Override
+    public void check() {
         File kindDir = new File(kindDirPath);
         File checkF;
         // サムネイル保存ディレクトリを作成する。
@@ -46,12 +54,11 @@ public class LibraryChecker {
         
         /*
          * [kind].list が
-         * 存在する
-         *      → 読み込みを開始
          * 存在しない
          *      → 作る
+         * 存在する
+         *      → 読み込みを開始
          */  
-        boolean problem=false;
         checkF =  new File(kindDirPath + kind + ".list");
         if( ! checkF.exists() ) {
             kindDir.mkdirs();
@@ -75,7 +82,7 @@ public class LibraryChecker {
             List<String> dirList;
             int dirNum;
             StringBuilder sb = new StringBuilder();
-            if ( ( dirNum= (dirList=getDirList(kindDir) ).size() ) > 0 ) {
+            if ( ( dirNum= (dirList=getDirList(kindDir)).size() ) > 0 ) {
                 if (dirNum > LIMIT_kind) {
                     kind_num = LIMIT_kind;
                 } else {  kind_num=dirNum;  }
@@ -87,19 +94,17 @@ public class LibraryChecker {
             } else {
                 sb.append(kind+"名"+",No_Image");
             }
-            syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.DirFile.writeAll(checkF, sb.toString());
+            DirFile.writeAll(checkF, sb.toString());
     
             // カテゴリーの階層でtrueになった場合は、●初回起動の説明ページを表示。
-            problem = true;
         }
-        
         
         /*
          * ○kind+".list "に書いてある [kindの要素の名前のついたディレクトリ] が全て存在しているかを確認。
          * ○なければ作る
          */
         // kind+".list " を読み込み
-        String[] List_checkDir = syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.DirFile.readAll(checkF).split("\n", -1);
+        String[] List_checkDir = DirFile.readAll(checkF).split("\n", -1);
         kind_num = List_checkDir.length;
         Names = new ArrayList<>();
         ImgNames = new ArrayList<>();
@@ -113,8 +118,11 @@ public class LibraryChecker {
                 checkF.mkdir();
             }
         }
+    }
     
-        return problem;
+    @Override
+    protected void ReflectUpdate() {
+        
     }
     
     
@@ -132,6 +140,7 @@ public class LibraryChecker {
     
     
 
+    // .list に変更を追記
     private void update_listF() {
         File checkF =  new File(kindDirPath + kind + ".list");
         StringBuilder sb = new StringBuilder();
@@ -140,7 +149,7 @@ public class LibraryChecker {
             sb.append(Names.get(i)+","+ImgNames.get(i));
             if (i != kind_num-1) sb.append("\n");
         }
-        syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.DirFile.writeAll(checkF, sb.toString());
+        DirFile.writeAll(checkF, sb.toString());
     }
     
     // 新しいライブラリ（カテゴリ、リスト）を作成

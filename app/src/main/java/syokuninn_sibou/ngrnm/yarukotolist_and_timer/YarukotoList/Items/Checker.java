@@ -5,13 +5,14 @@ package syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Items;
  */
 
 public abstract class Checker {
-    public Checker() {
-        determPath();
+    
+    public Checker(String mode) {
+        determPath(mode);
+        check();
     }
-    
-    protected abstract void determPath();
-    
+    protected abstract void determPath(String mode);
     protected abstract void check();
+    
     
     protected abstract void ReflectUpdate();
 }

@@ -5,7 +5,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical"
               android:gravity="center"
-              tools:context=".TimerSetActivity">
+              tools:context=".Timer.TimerSetActivity">
 
     
     <TextView
@@ -17,7 +17,7 @@
 
     <Button
         android:id="@+id/return_button"
-        android:text="戻る"
+        android:text="元の画面に戻る"
         android:textSize="30sp"
         android:layout_margin="20dp"
         android:layout_width="match_parent"
