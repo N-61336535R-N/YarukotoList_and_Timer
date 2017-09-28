@@ -15,13 +15,12 @@
             <intent-filter
                 android:label="やること・タイマー">
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".YarukotoList.YCategoryActivity"
-            android:label="やることリスト 一覧" >
+            android:label="やることカテゴリ 一覧" >
         </activity>
         <activity
             android:name=".YarukotoList.YListerActivity"
@@ -48,7 +47,11 @@
             android:name=".Timer.TimerSetActivity"
             android:label="タイマー予約" >
         </activity>
-
+        <activity
+            android:name=".SettingActivity"
+            android:label="設定" >
+        </activity>
+        
     </application>
 
 </manifest>

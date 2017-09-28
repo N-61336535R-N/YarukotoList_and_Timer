@@ -19,7 +19,7 @@
         android:layout_width="110dp"
         android:layout_height="23dp"
         android:gravity="center_horizontal"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:textColor="#ab000000"
         />
 </LinearLayout>

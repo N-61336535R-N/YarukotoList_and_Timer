@@ -15,15 +15,19 @@ import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.R;
+import syokuninn_sibou.ngrnm.yarukotolist_and_timer.SettingActivity;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.Timer.TimerActivity;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.Timer.TimerSetActivity;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Utils.MoldDialogs;
+import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.YItemsActivity;
+import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.YListerActivity;
 
 /**
  * LibraryChecker とのやりとりを中心に実装
@@ -73,6 +77,18 @@ public abstract class LibraryActivity extends AppCompatActivity {
     
     
     
+        //リスト項目が選択された時のイベントを追加
+        getAView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String msg = position + "番目のアイテムがクリックされました";
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+            
+                // やることリストの項目一覧画面に移動
+                Consts.listName = getLibC().getNames().get(position);
+                Intent intent = new Intent(getThisActivity(), YItemsActivity.class);
+                startActivity(intent);
+            }
+        });
     
     
     
@@ -219,7 +235,7 @@ public abstract class LibraryActivity extends AppCompatActivity {
         
         switch (id) {
             case R.id.menu_add_list:
-                if (getLibC().getNames().size() + 1 < Consts.LIMIT_Lists) {
+                if (getLibC().getNames().size() < getLibC().getLIMIT_kind()) {
                     final EditText editView = new EditText(this);
                     AlertDialog.Builder dialog = MoldDialogs.makeBaseInputDialog(this, "新しい項目の名前を入力", editView);
                     MoldDialogs.setSimpleCancelButton(dialog);
@@ -231,17 +247,27 @@ public abstract class LibraryActivity extends AppCompatActivity {
                             // 第２引数は、移動先内での、その画像ファイルの名前のみ
                             // 今は、"No_Image"で統一
                             getLibC().makeNewLibrary(newItemTitle, "No_Image");
-                            Toast.makeText(getThisActivity(), "「" + editView.getText().toString() + "」の作成成功", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getThisActivity(), "「" + editView.getText().toString() + "」の作成に成功しました!", Toast.LENGTH_SHORT).show();
                             updateListView();
                         }
                     });
-                    dialog.show();
+                    AlertDialog TsuikaDialog = dialog.create();
+                    TsuikaDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface arg0) {
+                            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            inputMethodManager.showSoftInput(editView, 0);
+                        }
+                    });
+                    TsuikaDialog.show();
                 } else {
                     Toast.makeText(getThisActivity(), "リスト数の上限：" + Consts.LIMIT_Lists + "個を超えました", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             case R.id.action_settings:
                 Toast.makeText(this, "(未)設定", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LibraryActivity.this, SettingActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.menu_save_timer_set:
                 Toast.makeText(this, "(未)タイマーリスト保存", Toast.LENGTH_SHORT).show();

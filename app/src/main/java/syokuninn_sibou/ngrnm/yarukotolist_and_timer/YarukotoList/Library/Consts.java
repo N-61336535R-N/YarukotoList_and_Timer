@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Consts {
     private Consts(){}
     
-    public static final int LIMIT_Category = 4;
+    public static final int LIMIT_Category = 16;
     public static final int LIMIT_Lists = 16;
     public static final int LIMIT_Items = 5;
     

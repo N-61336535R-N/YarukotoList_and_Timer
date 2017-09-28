@@ -75,20 +75,7 @@ public class YListerActivity extends LibraryActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         
-        //リスト項目が選択された時のイベントを追加
-        lV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String msg = position + "番目のアイテムがクリックされました";
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-    
-                // やることリストの項目一覧画面に移動
-                Consts.listName = LibC.getNames().get(position);
-                Intent intent = new Intent(YListerActivity.this, YItemsActivity.class);
-                startActivity(intent);
-            }
-        });
     }
     
     

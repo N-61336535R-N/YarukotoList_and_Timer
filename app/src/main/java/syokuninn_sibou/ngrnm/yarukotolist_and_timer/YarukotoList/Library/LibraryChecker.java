@@ -153,17 +153,14 @@ public class LibraryChecker extends Checker {
     }
     
     // 新しいライブラリ（カテゴリ、リスト）を作成
-    public boolean makeNewLibrary(String ItemName, String ItemImageName) {
-        if (Names.size() + 1 < LIMIT_kind) {
-            Names.add(ItemName);
-            ImgNames.add(ItemImageName);
-            kind_num++;
-            // Items.list を更新
-            update_listF();
-            // ディレクトリ作成
-            new File(kindDirPath + Names.get(kind_num-1)).mkdir();
-            return true;
-        } else {  return false;  }
+    public void makeNewLibrary(String ItemName, String ItemImageName) {
+        Names.add(ItemName);
+        ImgNames.add(ItemImageName);
+        kind_num++;
+        // Items.list を更新
+        update_listF();
+        // ディレクトリ作成
+        new File(kindDirPath + Names.get(kind_num-1)).mkdir();
     }
     
     // 選択したライブラリ（カテゴリ、リスト）を削除
@@ -202,7 +199,7 @@ public class LibraryChecker extends Checker {
 
     
     
-    public  List<String>getNames() {
+    public List<String>getNames() {
         return Names;
     }
     public List<String> getImgNames() {
@@ -214,4 +211,8 @@ public class LibraryChecker extends Checker {
     public String ImgDirPath() {
         return imgDirPath;
     }
+    public int getLIMIT_kind() {
+        return LIMIT_kind;
+    }
+    
 }
