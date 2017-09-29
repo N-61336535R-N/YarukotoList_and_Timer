@@ -18,7 +18,7 @@ public class LibraryChecker extends Checker {
     private int kind_num;
     
     private String kindDirPath;
-    private String imgDirPath;
+    private String defaultImgDirPath;
     
     
     public LibraryChecker(String kind) {
@@ -40,7 +40,7 @@ public class LibraryChecker extends Checker {
                 kindDirPath = Consts.libraryRootPath + Consts.combinePath(Consts.libraryName);
                 break;
         }
-        this.imgDirPath = Consts.rootPath + kind + "_imgs/";
+        this.defaultImgDirPath = kindDirPath + "_imgs/"; 
     }
     
     @Override
@@ -48,7 +48,7 @@ public class LibraryChecker extends Checker {
         File kindDir = new File(kindDirPath);
         File checkF;
         // サムネイル保存ディレクトリを作成する。
-        if (!(checkF = new File(imgDirPath)).exists()) {
+        if (!(checkF = new File(defaultImgDirPath)).exists()) {
             checkF.mkdir();
         }
         
@@ -92,6 +92,7 @@ public class LibraryChecker extends Checker {
                     if (i != kind_num-1) sb.append("\n");
                 }
             } else {
+                // No_Image の場合は、無条件にあの画像になる。
                 sb.append(kind+"名"+",No_Image");
             }
             DirFile.writeAll(checkF, sb.toString());
@@ -208,8 +209,8 @@ public class LibraryChecker extends Checker {
     public int getKind_num() {
         return kind_num;
     }
-    public String ImgDirPath() {
-        return imgDirPath;
+    public String defaultImgDirPath() {
+        return defaultImgDirPath;
     }
     public int getLIMIT_kind() {
         return LIMIT_kind;

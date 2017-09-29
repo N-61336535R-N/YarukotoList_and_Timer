@@ -6,13 +6,11 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,7 +20,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import syokuninn_sibou.ngrnm.yarukotolist_and_timer.Timer.*;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.*;
 
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.R;
@@ -103,9 +100,9 @@ public class YCategoryActivity extends LibraryActivity {
     protected void updateListView() {
         // デフォルト画像が準備できてない（No_Image.pngがない）場合は、
         // セッティングし直す。
-        String NoImage = LibC.ImgDirPath() + "No_Image.png";
+        String NoImage = LibC.defaultImgDirPath() + "No_Image.png";
         if (!new File(NoImage).exists()) {
-            setAllImage("No_Image", LibC.ImgDirPath());
+            setAllImage("No_Image", LibC.defaultImgDirPath());
         }
     
         // GridView に表示する項目の登録

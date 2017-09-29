@@ -1,31 +1,16 @@
 package syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList;
 
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
-import android.view.ContextMenu;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.R;
-import syokuninn_sibou.ngrnm.yarukotolist_and_timer.Timer.TimerActivity;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.*;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.Lists.*;
-import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Utils.MoldDialogs;
 
 /**
  *   ＜＜＜＜＜〜〜〜〜〜  やることリスト  〜〜〜〜〜＞＞＞＞＞
@@ -90,7 +75,7 @@ public class YListerActivity extends LibraryActivity {
                 case "No_Image":
                     break;
                 default:
-                    ImgName = LibC.ImgDirPath() + ImgName;
+                    ImgName = LibC.defaultImgDirPath() + ImgName;
             }
             ViewData item = new ViewData(ImgName, LibC.getNames().get(i));
             list.add(item);

@@ -77,7 +77,7 @@ public class YItemsActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
                 // 選択アイテムを取得
                 ListView listView = (ListView)parent;
-                String item = (String)listView.getItemAtPosition(pos);
+                //String item = (String)listView.getItemAtPosition(pos);
                 //Toast.makeText(YItemsActivity.this, item, Toast.LENGTH_LONG).show();
                 /**(未)
                  * 次のintentに移動
@@ -125,19 +125,6 @@ public class YItemsActivity extends AppCompatActivity {
         mListView.enableSwipeToDismiss();
         
         
-        
-        // FloatingActionButton（↘︎のタイマーアイコン）
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // やることリスト（編集）画面に移動
-                Intent intent = new Intent(YItemsActivity.this, TimerActivity.class);
-                startActivity(intent);
-            }
-        });
-    
-    
     }
     
     

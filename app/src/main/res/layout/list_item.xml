@@ -22,7 +22,7 @@
             android:background="?selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <TextView android:id="@+id/title"
+            <TextView android:id="@+id/text"
                       android:layout_alignParentLeft="true"
                       android:layout_centerVertical="true"
                       android:textAppearance="?android:textAppearanceLarge"
