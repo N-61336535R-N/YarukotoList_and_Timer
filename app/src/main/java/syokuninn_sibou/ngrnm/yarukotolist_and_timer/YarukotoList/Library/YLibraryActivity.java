@@ -10,24 +10,18 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.R;
-import syokuninn_sibou.ngrnm.yarukotolist_and_timer.SettingActivity;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.Timer.TimerActivity;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.Timer.TimerSetActivity;
-import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Utils.MoldDialogs;
+import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.YActivity;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.YItemsActivity;
-import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.YListerActivity;
 
 /**
  * LibraryChecker とのやりとりを中心に実装
@@ -38,10 +32,10 @@ import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.YListerActivity
  * （Consts の値(Settingで変更)を元に、switch でListの表示形式を決定）
  * 
  * 
- * ○ Checker → ViewData → LibraryActivity ができるように、リファクタリングする。
+ * ○ Checker → ViewData → YLibraryActivity ができるように、リファクタリングする。
  */
 
-public abstract class LibraryActivity extends AppCompatActivity {
+public abstract class YLibraryActivity extends YActivity {
     /* 以下のように実装して、識別子kindを指定する。
     private static final String kind = "[どのタイプのViewなのかの識別子]";
     @Override
@@ -54,8 +48,14 @@ public abstract class LibraryActivity extends AppCompatActivity {
     protected abstract void setLibC(LibraryChecker LibC);
 
     protected abstract AdapterView getAView();
-    protected abstract Context getThisActivity();
     
+    private YLibraryActivity instance = null;
+    public YLibraryActivity getInstance() {
+        return instance;
+    }
+    protected Context getThisActivity() {
+        return getInstance().getApplicationContext();
+    }
     
     protected abstract @LayoutRes int getLayoutResID();
     
@@ -64,6 +64,7 @@ public abstract class LibraryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResID());
     
+        instance = this;
     
         // Lists.list に登録されているカテゴリーのデータフォルダ
         //  が本当に存在しているかをまず確認。
@@ -98,7 +99,7 @@ public abstract class LibraryActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LibraryActivity.this, TimerSetActivity.class);
+                Intent intent = new Intent(YLibraryActivity.this, TimerSetActivity.class);
                 startActivity(intent);
             }
         });
@@ -108,7 +109,7 @@ public abstract class LibraryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // やることリスト（編集）画面に移動
-                Intent intent = new Intent(LibraryActivity.this, TimerActivity.class);
+                Intent intent = new Intent(YLibraryActivity.this, TimerActivity.class);
                 startActivity(intent);
             }
         });
@@ -116,7 +117,7 @@ public abstract class LibraryActivity extends AppCompatActivity {
     
     protected abstract void updateListView();
     
-    protected void removeList(int posi) {
+    void removeList(int posi) {
         getLibC().removeLibrary(posi);
     }
     
@@ -155,8 +156,7 @@ public abstract class LibraryActivity extends AppCompatActivity {
                 String s = getLibC().getNames().get(info.position);
                 
                 showDialogFragment(s, info.position);
-                Toast.makeText(getBaseContext(), s + " - Delete", Toast.LENGTH_SHORT).show();
-                
+                //Toast.makeText(getBaseContext(), s + " を削除", Toast.LENGTH_SHORT).show();
                 return true;
             
             case R.id.listview_edit:
@@ -174,7 +174,6 @@ public abstract class LibraryActivity extends AppCompatActivity {
         dialog.show(manager, "dialog");
     }
     
-    
     /*
      * 削除ダイアログを生成する内部クラス
      * 内部クラスは外部クラスのインスタンスを直接参照できないため，
@@ -191,8 +190,8 @@ public abstract class LibraryActivity extends AppCompatActivity {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle(selectedItem+" を削除すると、もとに戻せません！");
-            builder.setMessage("本当によろしいですか？");
+            builder.setTitle("確認");
+            builder.setMessage("「"+selectedItem+"」を削除すると 元に戻せません！\n本当によろしいですか？");
             
             // positiveを選択した場合の処理．
             // リスナーはDialogINterface#onClickListener()
@@ -203,7 +202,7 @@ public abstract class LibraryActivity extends AppCompatActivity {
                 // Activity#getActivity()でActivityのインスタンスを取得する
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    LibraryActivity activity = (LibraryActivity) getActivity();
+                    YLibraryActivity activity = (YLibraryActivity) getActivity();
                     activity.removeList(posi);
                     activity.updateListView();
                 }
@@ -222,62 +221,6 @@ public abstract class LibraryActivity extends AppCompatActivity {
     }
     
     
-    // ↗︎ オプションメニューの中身設定
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.ylist_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
     
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        
-        switch (id) {
-            case R.id.menu_add_list:
-                if (getLibC().getNames().size() < getLibC().getLIMIT_kind()) {
-                    final EditText editView = new EditText(this);
-                    AlertDialog.Builder dialog = MoldDialogs.makeBaseInputDialog(this, "新しい項目の名前を入力", editView);
-                    MoldDialogs.setSimpleCancelButton(dialog);
-                    // OKボタンの設定
-                    dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            String newItemTitle = editView.getText().toString();
-                            // サムネイル画像は、指定次第、その場で imgDirPath まで移動させる。
-                            // 第２引数は、移動先内での、その画像ファイルの名前のみ
-                            // 今は、"No_Image"で統一
-                            getLibC().makeNewLibrary(newItemTitle, "No_Image");
-                            Toast.makeText(getThisActivity(), "「" + editView.getText().toString() + "」の作成に成功しました!", Toast.LENGTH_SHORT).show();
-                            updateListView();
-                        }
-                    });
-                    AlertDialog TsuikaDialog = dialog.create();
-                    TsuikaDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface arg0) {
-                            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                            inputMethodManager.showSoftInput(editView, 0);
-                        }
-                    });
-                    TsuikaDialog.show();
-                } else {
-                    Toast.makeText(getThisActivity(), "リスト数の上限：" + Consts.LIMIT_Lists + "個を超えました", Toast.LENGTH_SHORT).show();
-                }
-                return true;
-            case R.id.action_settings:
-                Toast.makeText(this, "(未)設定", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LibraryActivity.this, SettingActivity.class);
-                startActivity(intent);
-                return true;
-            case R.id.menu_save_timer_set:
-                Toast.makeText(this, "(未)タイマーリスト保存", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.system_exit:
-                Toast.makeText(this, "(未)終了", Toast.LENGTH_SHORT).show();
-                return true;
-        }
-        
-        return super.onOptionsItemSelected(item);
-    }
     
 }

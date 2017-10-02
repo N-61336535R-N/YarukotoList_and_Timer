@@ -49,7 +49,7 @@ public class ItemIO {
     }
     
     public static String[] readAllItem() {
-        ItemContents[0] = ItC.getTitles().get(Consts.ItemNumber);
+        ItemContents[0] = ItC.getNames().get(Consts.ItemNumber);
         for (int i=1; i<3; i++) {
             ItemContents[i] = DirFile.readAll(ItemFs[i]);
         }
@@ -57,7 +57,7 @@ public class ItemIO {
     }
     
     public static void updateItem(String[] new_data) {
-        ItC.getTitles().set(Consts.ItemNumber, new_data[0]);
+        ItC.getNames().set(Consts.ItemNumber, new_data[0]);
         ItC.update_listF();
         for (int i=1; i<3; i++) {
              DirFile.writeAll(ItemFs[i], new_data[i]);

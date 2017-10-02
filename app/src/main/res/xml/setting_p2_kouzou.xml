@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="カテゴリー１">
+    <PreferenceCategory android:title="階層">
+        <EditTextPreference
+            android:title="階層数"
+            android:defaultValue="Default value"
+            android:key="KAISOU_num"
+            android:selectAllOnFocus="true"
+            android:singleLine="true" />
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="switch_preference"
-            android:title="スイッチ" />
+            android:title="階層のスイッチ" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="check_box_preference"
-            android:title="チェックボックス" />
+            android:title="階層のチェックボックス" />
     </PreferenceCategory>
     
     <PreferenceCategory android:title="Backup">
@@ -18,7 +24,7 @@
             android:key="edit_text_preference"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="やることリストを全てバックアップする" />
+            android:title="階層に関する設定" />
     </PreferenceCategory>
     
 </PreferenceScreen>

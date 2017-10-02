@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Checker;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.Consts;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.DirFile;
 
@@ -171,7 +172,7 @@ public class ItemsChecker extends Checker {
         check();
     }
     
-    public List<String> getTitles() {
+    public List<String> getNames() {
         return Titles;
     }
     

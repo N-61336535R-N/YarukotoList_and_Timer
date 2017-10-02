@@ -49,7 +49,7 @@ public class TimerSetActivity extends AppCompatActivity {
     // ↗︎ オプションメニューの中身設定
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.ylist_menu, menu);
+        getMenuInflater().inflate(R.menu.y_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
     @Override

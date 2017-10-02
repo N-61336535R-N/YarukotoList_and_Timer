@@ -1,6 +1,5 @@
 package syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -25,7 +24,7 @@ import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.Lists.*
  *  ■ mDatas が用意できれば、画面描画はできる。
  */
 
-public class YListerActivity extends LibraryActivity {
+public class YListerActivity extends YLibraryActivity {
     private static final String kind = "Lists";
     @Override protected final String getKind() {
         return kind;
@@ -42,10 +41,6 @@ public class YListerActivity extends LibraryActivity {
     
     @Override protected AdapterView getAView() {
         return lV;
-    }
-    
-    @Override protected Context getThisActivity() {
-        return YListerActivity.this;
     }
     
     
@@ -87,7 +82,7 @@ public class YListerActivity extends LibraryActivity {
         // adapterの準備
         list = makeListView();
         // adapterのインスタンスを作成
-        adapter = new ImageArrayAdapter(this, R.layout.list_view_image_item, list);
+        adapter = new ImageArrayAdapter(this, R.layout.list_image_item, list);
         
         lV = (ListView) findViewById(R.id.listview);
         lV.setAdapter(adapter);

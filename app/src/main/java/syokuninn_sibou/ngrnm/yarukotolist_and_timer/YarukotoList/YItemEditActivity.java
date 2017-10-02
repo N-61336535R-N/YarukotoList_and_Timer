@@ -74,7 +74,7 @@ public class YItemEditActivity extends AppCompatActivity {
     // ↗︎ オプションメニューの中身設定
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.ylist_edit_menu, menu);
+        getMenuInflater().inflate(R.menu.yitem_edit_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
     @Override

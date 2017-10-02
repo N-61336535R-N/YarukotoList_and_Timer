@@ -1,13 +1,9 @@
 package syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.R;
@@ -50,7 +46,7 @@ public class YItemShowActivity extends AppCompatActivity {
     // ↗︎ オプションメニューの中身設定
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.ylist_edit_menu, menu);
+        getMenuInflater().inflate(R.menu.yitem_edit_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
     @Override

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Backup設定">
+        <EditTextPreference
+            android:title="バックアップ先"
+            android:defaultValue="Default value"
+            android:key="KAISOU_num"
+            android:selectAllOnFocus="true"
+            android:singleLine="true" />
+        <SwitchPreferenceCompat
+            android:title="バックアップオプションのスイッチ"
+            android:defaultValue="false"
+            android:key="switch_preference" />
+        <CheckBoxPreference
+            android:title="バックアップオプションのチェックボックス"
+            android:defaultValue="false"
+            android:key="check_box_preference" />
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="Backup">
+        <PreferenceScreen
+            android:title="バックアップを実行"
+            android:summary="↑で指定したパスに「Backup_YLibrarys.zip」\nを作成します。"
+            android:key="prefKey_goBackup">
+        </PreferenceScreen>
+        <intent android:action="android.intent.action.VIEW"
+                android:targetPackage="yarukotolist_and_timer.Timer"
+                android:targetClass="yarukotolist_and_timer.Timer.TimerActivity" />
+    </PreferenceCategory>
+    
+
+
+</PreferenceScreen>

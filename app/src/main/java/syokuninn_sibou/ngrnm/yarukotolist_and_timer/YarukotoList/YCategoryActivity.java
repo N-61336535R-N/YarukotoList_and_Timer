@@ -1,28 +1,23 @@
 package syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.*;
-
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.R;
+import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.AddImage;
+import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.Consts;
+import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.Grids.GridAdapter;
+import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.YLibraryActivity;
+import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.LibraryChecker;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.Lists.ViewData;
 
 
@@ -35,7 +30,7 @@ import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.Lists.V
  * 
  * ■ VDatas が用意できれば、画面描画はできる。
  */
-public class YCategoryActivity extends LibraryActivity {
+public class YCategoryActivity extends YLibraryActivity {
     private static final String kind = "Category";
     @Override protected String getKind() {
         return kind;
@@ -52,11 +47,6 @@ public class YCategoryActivity extends LibraryActivity {
     @Override protected AdapterView getAView() {
         return gV;
     }
-    
-    @Override protected Context getThisActivity() {
-        return YCategoryActivity.this;
-    }
-    
     
     
     private ViewData[] VDatas;
@@ -109,7 +99,7 @@ public class YCategoryActivity extends LibraryActivity {
         int test = LibC.getKind_num();
         VDatas = new ViewData[test];
         for (int i = 0; i< LibC.getKind_num(); i++) {
-            VDatas[i] = new ViewData(NoImage,  LibC.getNames().get(i));
+            VDatas[i] = new ViewData(NoImage, LibC.getNames().get(i));
         }
     
     
@@ -152,46 +142,4 @@ public class YCategoryActivity extends LibraryActivity {
         }
     }
     
-    
-    /*  GridView の生成の諸々  */
-    class ViewHolder {
-        ImageView imageView;
-        TextView textView;
-    }
-    
-    // ArrayAdapter<ViewData> を継承した GridAdapter クラスのインスタンス生成
-    private class GridAdapter extends ArrayAdapter<ViewData> {
-        private LayoutInflater inflater;
-        private int layoutId;
-    
-        public GridAdapter(Context context, int layoutId, ViewData[] objects) {
-            super(context, 0, objects);
-            this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            this.layoutId = layoutId;
-        }
-    
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
-            
-            if (convertView == null) {
-                // main.xml の <GridView .../> に grid_items.xml を inflate して convertView とする
-                convertView = inflater.inflate(layoutId, parent, false);
-                // ViewHolder を生成
-                holder = new ViewHolder();
-                holder.textView = (TextView) convertView.findViewById(R.id.textview);
-                holder.imageView = (ImageView) convertView.findViewById(R.id.imageview);
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-            
-            ViewData data = getItem(position);
-            holder.textView.setText(data.getTitle());
-            Bitmap bmp = BitmapFactory.decodeFile(data.getImagePath());
-            holder.imageView.setImageBitmap(bmp);
-        
-            return convertView;
-        }
-    }
 }

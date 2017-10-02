@@ -48,8 +48,12 @@
             android:label="タイマー予約" >
         </activity>
         <activity
-            android:name=".SettingActivity"
+            android:name=".Settings.SettingActivity"
             android:label="設定" >
+        </activity>
+        <activity
+            android:name=".Settings.SettingMoldActivity"
+            android:label="[設定カテゴリ名]" >
         </activity>
         
     </application>

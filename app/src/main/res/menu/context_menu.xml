@@ -4,9 +4,9 @@
     <item
         android:id="@+id/listview_edit"
         android:showAsAction="never"
-        android:title="Edit"/>
+        android:title="編集"/>
     <item
         android:id="@+id/listview_delete"
         android:showAsAction="never"
-        android:title="Delete"/>
+        android:title="削除"/>
 </menu>

@@ -1,17 +1,17 @@
-package syokuninn_sibou.ngrnm.yarukotolist_and_timer;
+package syokuninn_sibou.ngrnm.yarukotolist_and_timer.Settings;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+
+import syokuninn_sibou.ngrnm.yarukotolist_and_timer.R;
 
 /**
  * Created by ryo on 2017/09/28.
  */
 
-public class SettingActivity extends AppCompatActivity implements SettingFragment.OnFragmentInteractionListener {
+public class SettingMoldActivity extends AppCompatActivity implements SettingFragment.OnFragmentInteractionListener {
     public static Intent createInstance(Context con) {
         Intent intent = new Intent(con, SettingFragment.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -21,6 +21,6 @@ public class SettingActivity extends AppCompatActivity implements SettingFragmen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting);
+        setContentView(R.layout.activity_setting_mold);
     }
 }

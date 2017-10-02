@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Items.Checker;
+import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Checker;
 
 /**
  * Created by M.R on 2017/06/04.
@@ -155,6 +155,9 @@ public class LibraryChecker extends Checker {
     
     // 新しいライブラリ（カテゴリ、リスト）を作成
     public void makeNewLibrary(String ItemName, String ItemImageName) {
+        /**
+         * 同じ名前があった場合は例外を投げる
+         */
         Names.add(ItemName);
         ImgNames.add(ItemImageName);
         kind_num++;

@@ -1,4 +1,4 @@
-package syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Items;
+package syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList;
 
 /**
  * Created by M.R on 2017/08/01.
