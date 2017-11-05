@@ -15,7 +15,7 @@ public class SettingConsts {
             // Scenes of Isle of Wight
             "表示",
             "構造",
-            "全てバックアップ"
+            "バックアップ"
     };
     
     // ちょっと冗長的ですが分かり易くするために

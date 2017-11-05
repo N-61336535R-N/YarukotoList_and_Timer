@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,6 +44,12 @@ public class YItemsActivity extends YActivity {
     private ItemsChecker ItC;
     private ItemsChecker FItC;
     
+    @Override
+    protected Checker getLibC() {
+        return ItC;
+    }
+    
+    
     
     // 最初のリスト：カテゴリクリック時に、そのカテゴリの固有IDを取得
     //                              → その固有IDを元に、リストファイルから項目を取得
@@ -70,7 +75,7 @@ public class YItemsActivity extends YActivity {
         mListView = (EnhancedListView) findViewById(R.id.listview1);
     
         // 再描画のために一つにまとめた
-        makeListView();
+        updateList();
         
         // アイテムクリック時のイベントを追加
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -123,86 +128,29 @@ public class YItemsActivity extends YActivity {
             }
         });
         mListView.enableSwipeToDismiss();
-        
-        
     }
     
     
     
     
-    
-    // ↗︎ オプションメニューの中身設定
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.y_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.menu_add_list:
-                if (ItC.getNames().size() + 1 < Consts.LIMIT_Items) {
-                    final EditText editView = new EditText(this);
-                    editView.setInputType(InputType.TYPE_CLASS_TEXT);
-                    AlertDialog.Builder ADBuilder
-                            = new AlertDialog.Builder(this)
-                            .setTitle("新しい項目の名前を入力")
-                            .setView(editView)
-                            .setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    // Okボタンを押した時の処理。何もしないver
-                                }
-                            });
-                    // OKボタンの設定
-                    ADBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            String newItemTitle = editView.getText().toString();
-                            ItC.makeNewItem(newItemTitle);
-                            Toast.makeText(YItemsActivity.this, "「"+editView.getText().toString()+"」の作成成功", Toast.LENGTH_SHORT).show();
-                            makeListView();
-                        }
-                    });
-                    AlertDialog TsuikaDialog = ADBuilder.create();
-                    TsuikaDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface arg0) {
-                            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                            inputMethodManager.showSoftInput(editView, 0);
-                        }
-                    });
-                    TsuikaDialog.show();
-                } else {
-                    Toast.makeText(YItemsActivity.this, "上限："+Consts.LIMIT_Items+" 個を超えました", Toast.LENGTH_SHORT).show(); 
-                }
-                return true;
-            case R.id.action_settings:
-                Toast.makeText(this, "(未)設定", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.edit_mode:
-                Toast.makeText(this, "(未)編集モード", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.system_exit:
-                Toast.makeText(this, "(未)終了", Toast.LENGTH_SHORT).show();
-                return true;
-        }
-        
-        return super.onOptionsItemSelected(item);
-    }
-    
-    
-    public void makeListView() {
+    public void updateList() {
         // リストビューにアイテム追加
         mItemList = new LinkedList<String>();
         mItemList.addAll( ItC.getNames() );
         mAdapter = new ArrayAdapter<String>(this, R.layout.list_list_item, R.id.text, mItemList);
         mListView.setAdapter(mAdapter);
     }
+    @Override
+    public void removeList(int posi) {
+        
+    }
+    
+    
     
     @Override
     protected void onResume() {
         super.onResume();
-        makeListView();
+        updateList();
     }
     
     // 画面遷移前に、mItemList の変更をディレクトリ構造に反映させる。

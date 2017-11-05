@@ -16,7 +16,6 @@ import syokuninn_sibou.ngrnm.yarukotolist_and_timer.R;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.AddImage;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.Consts;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.Grids.GridAdapter;
-import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.YLibraryActivity;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.LibraryChecker;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.Lists.ViewData;
 
@@ -44,7 +43,7 @@ public class YCategoryActivity extends YLibraryActivity {
         this.LibC = LibC;
     }
     
-    @Override protected AdapterView getAView() {
+    @Override protected AdapterView getAdptrView() {
         return gV;
     }
     
@@ -87,7 +86,7 @@ public class YCategoryActivity extends YLibraryActivity {
     }
     
     @Override
-    protected void updateListView() {
+    protected void updateList() {
         // デフォルト画像が準備できてない（No_Image.pngがない）場合は、
         // セッティングし直す。
         String NoImage = LibC.defaultImgDirPath() + "No_Image.png";
@@ -96,13 +95,12 @@ public class YCategoryActivity extends YLibraryActivity {
         }
     
         // GridView に表示する項目の登録
-        int test = LibC.getKind_num();
+        int test = LibC.getSize();
         VDatas = new ViewData[test];
-        for (int i = 0; i< LibC.getKind_num(); i++) {
+        for (int i = 0; i< LibC.getSize(); i++) {
             VDatas[i] = new ViewData(NoImage, LibC.getNames().get(i));
         }
-    
-    
+        
         // GridViewのインスタンスを生成
         gV = (GridView) findViewById(R.id.gridview);
         // BaseAdapter を継承したGridAdapterのインスタンスを生成

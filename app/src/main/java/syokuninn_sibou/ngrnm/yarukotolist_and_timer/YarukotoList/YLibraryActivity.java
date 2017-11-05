@@ -1,9 +1,8 @@
-package syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library;
+package syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,8 +19,8 @@ import android.widget.Toast;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.R;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.Timer.TimerActivity;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.Timer.TimerSetActivity;
-import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.YActivity;
-import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.YItemsActivity;
+import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.Consts;
+import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.LibraryChecker;
 
 /**
  * LibraryChecker とのやりとりを中心に実装
@@ -44,18 +43,10 @@ public abstract class YLibraryActivity extends YActivity {
     }
     */
     protected abstract String getKind();
-    protected abstract LibraryChecker getLibC();
     protected abstract void setLibC(LibraryChecker LibC);
 
-    protected abstract AdapterView getAView();
+    protected abstract AdapterView getAdptrView();
     
-    private YLibraryActivity instance = null;
-    public YLibraryActivity getInstance() {
-        return instance;
-    }
-    protected Context getThisActivity() {
-        return getInstance().getApplicationContext();
-    }
     
     protected abstract @LayoutRes int getLayoutResID();
     
@@ -64,7 +55,8 @@ public abstract class YLibraryActivity extends YActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResID());
     
-        instance = this;
+        // 多分、これで行ける。
+        setInstance(this);
     
         // Lists.list に登録されているカテゴリーのデータフォルダ
         //  が本当に存在しているかをまず確認。
@@ -72,14 +64,14 @@ public abstract class YLibraryActivity extends YActivity {
         setLibC( new LibraryChecker(getKind()) );
     
         
-        updateListView();
+        updateList();
     
-        registerForContextMenu(getAView());
+        registerForContextMenu(getAdptrView());
     
     
     
         //リスト項目が選択された時のイベントを追加
-        getAView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        getAdptrView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String msg = position + "番目のアイテムがクリックされました";
                 Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
@@ -115,11 +107,7 @@ public abstract class YLibraryActivity extends YActivity {
         });
     }
     
-    protected abstract void updateListView();
-    
-    void removeList(int posi) {
-        getLibC().removeLibrary(posi);
-    }
+
     
     
     
@@ -204,7 +192,7 @@ public abstract class YLibraryActivity extends YActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     YLibraryActivity activity = (YLibraryActivity) getActivity();
                     activity.removeList(posi);
-                    activity.updateListView();
+                    activity.updateList();
                 }
             });
             AlertDialog dialog = builder.create();

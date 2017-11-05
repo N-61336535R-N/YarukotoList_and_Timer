@@ -2,12 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory android:title="Backup設定">
-        <EditTextPreference
-            android:title="バックアップ先"
-            android:defaultValue="Default value"
-            android:key="KAISOU_num"
-            android:selectAllOnFocus="true"
-            android:singleLine="true" />
         <SwitchPreferenceCompat
             android:title="バックアップオプションのスイッチ"
             android:defaultValue="false"
@@ -20,8 +14,12 @@
     
     <PreferenceCategory android:title="Backup">
         <PreferenceScreen
+            android:title="バックアップ先"
+            android:key="prefKey_BackupPath"
+            android:selectAllOnFocus="true" />
+        <PreferenceScreen
             android:title="バックアップを実行"
-            android:summary="↑で指定したパスに「Backup_YLibrarys.zip」\nを作成します。"
+            android:summary="↑で指定したパスに「BackupYLibrarys.zip」\nを作成します。"
             android:key="prefKey_goBackup">
         </PreferenceScreen>
         <intent android:action="android.intent.action.VIEW"

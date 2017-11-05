@@ -20,10 +20,19 @@ import syokuninn_sibou.ngrnm.yarukotolist_and_timer.Settings.SettingActivity;
  */
 
 public abstract class YActivity extends AppCompatActivity {
+    protected abstract Checker getLibC();
     
-    abstract void updateListView();
+    private YActivity instance = null;
+    public YActivity getInstance() {
+        return instance;
+    }
+    public void setInstance(YActivity instance) {
+        this.instance = instance;
+    }
+    protected Context getThisActivity() {
+        return getInstance().getApplicationContext();
+    }
     
-    abstract void removeList(int posi);
     
     // ↗︎ メニューの中身設定
     @Override
@@ -35,10 +44,9 @@ public abstract class YActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        
         switch (id) {
             case R.id.menu_add_list:
-                if (getLibC().getNames().size() < getLibC().getLIMIT_kind()) {
+                if (getLibC().getSize() +1 < getLibC().getLIMIT_kind()) {
                     final EditText editView = new EditText(this);
                     editView.setInputType(InputType.TYPE_CLASS_TEXT);
                     AlertDialog.Builder ADBuilder
@@ -57,9 +65,9 @@ public abstract class YActivity extends AppCompatActivity {
                             // サムネイル画像は、指定次第、その場で imgDirPath まで移動させる。
                             // 第２引数は、移動先内での、その画像ファイルの名前のみ
                             // 今は、"No_Image"で統一
-                            getLibC().makeNewLibrary(newItemTitle, "No_Image");
+                            getLibC().addNew(newItemTitle, "No_Image");
                             Toast.makeText(getThisActivity(), "「" + editView.getText().toString() + "」の作成に成功しました!", Toast.LENGTH_SHORT).show();
-                            updateListView();
+                            updateList();
                         }
                     });
                     AlertDialog TsuikaDialog = ADBuilder.create();
@@ -72,23 +80,38 @@ public abstract class YActivity extends AppCompatActivity {
                     });
                     TsuikaDialog.show();
                 } else {
+                    AlertDialog.Builder ADBuilder
+                            = new AlertDialog.Builder(this)
+                            .setTitle("エラー")
+                            .setMessage("上限：" + getLibC().getLIMIT_kind() + " 個を超えました。\nこれ以上は追加できません。\n\n有料版をお試しください。")
+                            .setPositiveButton("キャンセル", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    // Okボタンを押した時の処理。何もしないver
+                                }
+                            });
+                    // OKボタンの設定
+                    AlertDialog ErrorDialog = ADBuilder.create();
+                    ErrorDialog.show();
                     Toast.makeText(getThisActivity(), "上限：" + getLibC().getLIMIT_kind() + " 個を超えました", Toast.LENGTH_SHORT).show();
                 }
+                return true;
+            case R.id.edit_mode:
+                Toast.makeText(this, "(未)選択", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_settings:
                 Toast.makeText(this, "設定", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(YActivity.this, SettingActivity.class);
                 startActivity(intent);
                 return true;
-            case R.id.menu_save_timer_set:
-                Toast.makeText(this, "(未)タイマーリスト保存", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.system_exit:
-                Toast.makeText(this, "(未)終了", Toast.LENGTH_SHORT).show();
-                return true;
         }
         
         return super.onOptionsItemSelected(item);
     }
+    
+    
+    public void removeList(int posi) {
+        getLibC().remove(posi);
+    }
+    protected abstract void updateList();
     
 }

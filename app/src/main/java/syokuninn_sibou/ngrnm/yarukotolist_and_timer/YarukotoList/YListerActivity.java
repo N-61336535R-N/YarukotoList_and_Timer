@@ -39,7 +39,7 @@ public class YListerActivity extends YLibraryActivity {
     }
     
     
-    @Override protected AdapterView getAView() {
+    @Override protected AdapterView getAdptrView() {
         return lV;
     }
     
@@ -63,7 +63,7 @@ public class YListerActivity extends YLibraryActivity {
     private List<ViewData> makeListView() {
         List<ViewData> list = new ArrayList<ViewData>();
         String ImgName;
-        for (int i = 0; i < LibC.getKind_num(); i++) {
+        for (int i = 0; i < LibC.getSize(); i++) {
             // item に画像をセット
             ImgName = LibC.getImgNames().get(i);
             switch (ImgName) {
@@ -78,7 +78,7 @@ public class YListerActivity extends YLibraryActivity {
         return list;
     }
     
-    protected final void updateListView() {
+    protected final void updateList() {
         // adapterの準備
         list = makeListView();
         // adapterのインスタンスを作成

@@ -126,13 +126,12 @@ public class LibraryChecker extends Checker {
         
     }
     
-    
     private static List<String> getDirList(File Dir) {
         File[] dirs = Dir.listFiles();
         List<String> dirList = new ArrayList<>();
         
         for (File dir : dirs) {
-            if (dir.isDirectory()) {
+            if (dir.isDirectory() && !dir.getName().equals("_img")) {
                 dirList.add(dir.getName());
             }
         }
@@ -154,7 +153,11 @@ public class LibraryChecker extends Checker {
     }
     
     // 新しいライブラリ（カテゴリ、リスト）を作成
-    public void makeNewLibrary(String ItemName, String ItemImageName) {
+    @Override
+    public void addNew(String ItemName, String option) {
+        makeNewLibrary(ItemName, option);
+    }
+    private void makeNewLibrary(String ItemName, String ItemImageName) {
         /**
          * 同じ名前があった場合は例外を投げる
          */
@@ -168,7 +171,11 @@ public class LibraryChecker extends Checker {
     }
     
     // 選択したライブラリ（カテゴリ、リスト）を削除
-    public void removeLibrary(int posi) {
+    @Override
+    public void remove(int posi) {
+        removeLibrary(posi);
+    }
+    private void removeLibrary(int posi) {
         // ディレクトリ削除
         delete( new File(kindDirPath + Names.get(posi)) );
         Names.remove(posi);
@@ -200,23 +207,27 @@ public class LibraryChecker extends Checker {
             f.delete();
         }
     }
-
     
     
-    public List<String>getNames() {
+    
+    @Override public List<String>getNames() {
         return Names;
     }
     public List<String> getImgNames() {
         return ImgNames;
     }
-    public int getKind_num() {
-        return kind_num;
-    }
     public String defaultImgDirPath() {
         return defaultImgDirPath;
     }
-    public int getLIMIT_kind() {
+    @Override public int getSize() {
+        if (kind_num != Names.size()) {
+            throw new IllegalStateException("[Check]サイズが正しく記録できていません。");
+        }
+        return kind_num;
+    }
+    @Override public int getLIMIT_kind() {
         return LIMIT_kind;
     }
+    
     
 }

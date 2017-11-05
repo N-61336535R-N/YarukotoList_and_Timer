@@ -1,19 +1,18 @@
 package syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Utils;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.text.InputType;
-import android.widget.EditText;
 
 /**
  * Created by M.R on 2017/06/27.
  */
 
 public final class MoldAlertDialogFragment extends DialogFragment {
+    private OnClickedPositiveButtonListener listener;
+    private boolean DoNegativeButtonSet = false;
     
     /**
      private void makeADialog(String title, String message) {
@@ -33,16 +32,46 @@ public final class MoldAlertDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         //fragment.show(ft, "dialog"); のタイミングで、Fragment本体が拾いに来るイメージ
-        return new AlertDialog
+        AlertDialog.Builder adlog = new AlertDialog
                 .Builder(getContext())
                 .setTitle(getArguments().getString("title"))
                 .setMessage(getArguments().getString("message"))
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        // Okボタンを押した時の処理。何もしないver
+                        dismiss();
+                        MoldAlertDialogFragment.this.listener.OnClickedPositiveButtonListener();
                     }
-                })
-                .create();
+                });
+                if (DoNegativeButtonSet) {
+                    // OK ボタンに役割がある場合は、何もしない"キャンセル"ボタンを作成。
+                    adlog.setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {}
+                    });
+                }
+        return adlog.create();
+    }
+    
+    
+    /**
+     * リスナーを設定
+     *
+     * @param listener 選択イベントリスナー
+     */
+    public void setOnClickedPositiveButtonListener(boolean DoNegativeButtonSet, OnClickedPositiveButtonListener listener) {
+        this.listener = listener;
+        this.DoNegativeButtonSet = DoNegativeButtonSet;
+    }
+    
+    /**
+     * ボタン押下インターフェース
+     */
+    public interface OnClickedPositiveButtonListener {
+        
+        /**
+         * 選択イベント
+         */
+        public void OnClickedPositiveButtonListener();
     }
     
 }

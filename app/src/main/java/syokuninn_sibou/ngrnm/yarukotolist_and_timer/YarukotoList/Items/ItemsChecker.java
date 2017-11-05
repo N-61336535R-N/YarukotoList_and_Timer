@@ -25,12 +25,15 @@ import static syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.
  */
 
 public class ItemsChecker extends Checker {
+    private List<String> Titles;
+    
+    private int LIMIT_kind;
+    private int kind_num;
+    
     private String kPath;
     private File kindDir;
     private File Item_list;
     private File checkF;
-    private int kind_num;
-    private List<String> Titles;
     
     
     /**
@@ -49,6 +52,7 @@ public class ItemsChecker extends Checker {
         if (mode.equals("finish")) {
             kPath += "fin/";
         }
+        LIMIT_kind = Consts.LIMIT_Items;
         kindDir = new File(kPath);
         Item_list = new File(kPath + "Item.list");
     }
@@ -172,20 +176,21 @@ public class ItemsChecker extends Checker {
         check();
     }
     
-    public List<String> getNames() {
-        return Titles;
-    }
     
     // int posi を指定すると、指定された位置に追加
     public void addTitle(String title) {
         Titles.add(title);
     }
-    
     public void addTitle(int posi, String title) {
         Titles.add(posi, title);
     }
     
-    public boolean makeNewItem(String ItemName) {
+    // 新しい項目を作成
+    @Override
+    public void addNew(String ItemName, String option) {
+        makeNewItem(ItemName);
+    }
+    public void makeNewItem(String ItemName) {
         addTitle(ItemName);
         kind_num = Titles.size();
         // Items.list を更新
@@ -193,16 +198,19 @@ public class ItemsChecker extends Checker {
         // ファイル作成
         Consts.ItemNumber = Titles.size() - 1;
         ItemIO.check();
-        return true;
     }
     
     //  終わった項目は、終わったもの置き場（・・・/項目名.finish）に移動
-    public static boolean moveItem(int posi) {
+    public static boolean moveFinItem(int posi) {
     
         return false;
     }
     // 終わったもの置き場からも削除したい（または間違ったので完全に削除したい）場合
-    public static boolean removeItem(int posi) {
+    @Override
+    public void remove(int posi) {
+        removeItem(posi);
+    }
+    private static boolean removeItem(int posi) {
     
         return false;
     }
@@ -216,4 +224,22 @@ public class ItemsChecker extends Checker {
     // → 全て比較して、変更箇所のみ変更
     public void ReflectUpdate() {
     }
+    
+    
+    
+    @Override public List<String> getNames() {
+        return Titles;
+    }
+    
+    @Override
+    public int getSize() {
+        if (kind_num != Titles.size()) {
+            throw new IllegalStateException("[Check]サイズが正しく記録できていません。");
+        }
+        return kind_num;
+    }
+    @Override public int getLIMIT_kind() {
+        return LIMIT_kind;
+    }
+    
 }
