@@ -15,7 +15,7 @@ import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.Consts;
  */
 
 public class Backuper {
-    private File originF = new File(Consts.libraryRootPath);
+    private File originF = new File(Consts.rootPath+"YList/");
     private File destiF;
     private ZipCompressUtils zipCU = new ZipCompressUtils();
     

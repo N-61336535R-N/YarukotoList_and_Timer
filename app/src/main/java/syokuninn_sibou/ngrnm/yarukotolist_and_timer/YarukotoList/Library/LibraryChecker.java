@@ -18,7 +18,6 @@ public class LibraryChecker extends Checker {
     private int kind_num;
     
     private String kindDirPath;
-    private String defaultImgDirPath;
     
     
     public LibraryChecker(String kind) {
@@ -33,24 +32,18 @@ public class LibraryChecker extends Checker {
         switch (kind) {
             case "Category":
                 LIMIT_kind = Consts.LIMIT_Category;
-                kindDirPath = Consts.libraryRootPath;
                 break;
             case "Lists":
                 LIMIT_kind = Consts.LIMIT_Lists;
-                kindDirPath = Consts.libraryRootPath + Consts.combinePath(Consts.libraryName);
                 break;
         }
-        this.defaultImgDirPath = kindDirPath + "_imgs/"; 
+        kindDirPath = Consts.rootPath + Consts.combinePath(Consts.libraryName);
     }
     
     @Override
     public void check() {
         File kindDir = new File(kindDirPath);
         File checkF;
-        // サムネイル保存ディレクトリを作成する。
-        if (!(checkF = new File(defaultImgDirPath)).exists()) {
-            checkF.mkdir();
-        }
         
         /*
          * [kind].list が
@@ -60,6 +53,11 @@ public class LibraryChecker extends Checker {
          *      → 読み込みを開始
          */  
         checkF =  new File(kindDirPath + kind + ".list");
+    
+        List<String> dirList = getDirList(kindDir);
+        int dirNum = dirList.size();
+        StringBuilder sb = new StringBuilder();
+    
         if( ! checkF.exists() ) {
             kindDir.mkdirs();
             try {
@@ -79,45 +77,58 @@ public class LibraryChecker extends Checker {
              *      ※ 「データベースが破損しました。修復を試みますか？」
              *          というメッセージのあと、同意を得てからする。
              */
-            List<String> dirList;
-            int dirNum;
-            StringBuilder sb = new StringBuilder();
-            if ( ( dirNum= (dirList=getDirList(kindDir)).size() ) > 0 ) {
-                if (dirNum > LIMIT_kind) {
-                    kind_num = LIMIT_kind;
-                } else {  kind_num=dirNum;  }
-                for (int i=0; i<kind_num; i++) {
-                    sb.append(dirList.get(i));
-                    sb.append(",No_Image");
-                    if (i != kind_num-1) sb.append("\n");
-                }
-            } else {
+            if ( dirNum == 0 ) {
                 // No_Image の場合は、無条件にあの画像になる。
-                sb.append(kind+"名"+",No_Image");
+                sb.append(kind+"名"+",No_Image\n");
+                DirFile.writeAll(checkF, sb.toString());
             }
-            DirFile.writeAll(checkF, sb.toString());
     
             // カテゴリーの階層でtrueになった場合は、●初回起動の説明ページを表示。
         }
         
+        
+        readLibraryFile(checkF);
+        sb = new StringBuilder();
+        sb.append(DirFile.readAll(checkF));
         /*
          * ○kind+".list "に書いてある [kindの要素の名前のついたディレクトリ] が全て存在しているかを確認。
          * ○なければ作る
          */
-        // kind+".list " を読み込み
-        String[] List_checkDir = DirFile.readAll(checkF).split("\n", -1);
-        kind_num = List_checkDir.length;
-        Names = new ArrayList<>();
-        ImgNames = new ArrayList<>();
-        for(String categ : List_checkDir) {
-            Names.add( categ.split(",", -1)[0] );
-            ImgNames.add( categ.split(",", -1)[1] );
+        for (String dir : dirList) {
+            if ( !Names.contains(dir) ) {
+                sb.append(dir);
+                Names.add(dir);
+                
+                File ImgFile = new File(kindDirPath + dir + "/" + Consts.LIB_IMG_NAME);
+                if (ImgFile.exists()) {
+                    sb.append(","+Consts.LIB_IMG_NAME);
+                    ImgNames.add(Consts.LIB_IMG_NAME);
+                } else {
+                    sb.append(",No_Image");
+                    ImgNames.add(",No_Image");
+                }
+                sb.append("\n");
+            }
         }
+        DirFile.writeAll(checkF, sb.toString());
+        kind_num = Names.size();
+        
         // ディレクトリがなければ作る
         for(int i=0; i<kind_num; i++) {
             if ( !( checkF = new File(kindDirPath+ Names.get(i)) ).exists() ) {
                 checkF.mkdir();
             }
+        }
+    }
+    protected void readLibraryFile(File checkF) {
+        // kind+".list " を読み込み
+        String[] List_checkDir = DirFile.readAll(checkF).split("\n", -1);
+        Names = new ArrayList<>();
+        ImgNames = new ArrayList<>();
+        for(String categ : List_checkDir) {
+            if (categ.equals("")) break;
+            Names.add( categ.split(",", -1)[0] );
+            ImgNames.add( categ.split(",", -1)[1] );
         }
     }
     
@@ -130,9 +141,11 @@ public class LibraryChecker extends Checker {
         File[] dirs = Dir.listFiles();
         List<String> dirList = new ArrayList<>();
         
-        for (File dir : dirs) {
-            if (dir.isDirectory() && !dir.getName().equals("_img")) {
-                dirList.add(dir.getName());
+        if (dirs!=null) {
+            for (File dir : dirs) {
+                if (dir.isDirectory()) {
+                    dirList.add(dir.getName());
+                }
             }
         }
         return dirList;
@@ -142,14 +155,14 @@ public class LibraryChecker extends Checker {
 
     // .list に変更を追記
     private void update_listF() {
-        File checkF =  new File(kindDirPath + kind + ".list");
+        File listF =  new File(kindDirPath + kind + ".list");
         StringBuilder sb = new StringBuilder();
     
         for (int i=0; i<kind_num; i++) {
             sb.append(Names.get(i)+","+ImgNames.get(i));
             if (i != kind_num-1) sb.append("\n");
         }
-        DirFile.writeAll(checkF, sb.toString());
+        DirFile.writeAll(listF, sb.toString());
     }
     
     // 新しいライブラリ（カテゴリ、リスト）を作成
@@ -216,8 +229,8 @@ public class LibraryChecker extends Checker {
     public List<String> getImgNames() {
         return ImgNames;
     }
-    public String defaultImgDirPath() {
-        return defaultImgDirPath;
+    public String getKindDirPath() {
+        return kindDirPath;
     }
     @Override public int getSize() {
         if (kind_num != Names.size()) {

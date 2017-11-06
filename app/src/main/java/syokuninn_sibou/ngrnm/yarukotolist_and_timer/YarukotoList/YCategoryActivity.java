@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -77,8 +78,12 @@ public class YCategoryActivity extends YLibraryActivity {
                 Intent intent = new Intent(YCategoryActivity.this, YListerActivity.class);
                 //intent.putExtra("ListPath", List_Datas[1][position]);
                 // Stack に、ディレクトリ名のみ保存
-                Consts.libraryName.add( VDatas[position].getTitle() );
+                Consts.inLibrary( VDatas[position].getTitle() );
+                Consts.hierarchy++;
                 //ntent.putExtra("CategoryName", VDatas[position].title);
+                String msg = "Consts.libraryName.size()：" + Consts.libraryName.size();
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+    
                 startActivity(intent);
             }
         });
@@ -89,18 +94,24 @@ public class YCategoryActivity extends YLibraryActivity {
     protected void updateList() {
         // デフォルト画像が準備できてない（No_Image.pngがない）場合は、
         // セッティングし直す。
-        String NoImage = LibC.defaultImgDirPath() + "No_Image.png";
+        String NoImage = Consts.rootPath + "img/";
         if (!new File(NoImage).exists()) {
-            setAllImage("No_Image", LibC.defaultImgDirPath());
+            setAllImage("Category_NoImage", NoImage);
         }
     
         // GridView に表示する項目の登録
         int test = LibC.getSize();
         VDatas = new ViewData[test];
         for (int i = 0; i< LibC.getSize(); i++) {
-            VDatas[i] = new ViewData(NoImage, LibC.getNames().get(i));
+            String childPath = LibC.getKindDirPath()+LibC.getNames().get(i)+"/";
+            switch (LibC.getImgNames().get(i)) {
+                case "No_Image":
+                    VDatas[i] = new ViewData(NoImage+"No_Image.png", LibC.getNames().get(i));
+                    break;
+                default:
+                    VDatas[i] = new ViewData(childPath+Consts.LIB_IMG_NAME, LibC.getNames().get(i));
+            }
         }
-        
         // GridViewのインスタンスを生成
         gV = (GridView) findViewById(R.id.gridview);
         // BaseAdapter を継承したGridAdapterのインスタンスを生成
@@ -125,6 +136,8 @@ public class YCategoryActivity extends YLibraryActivity {
             e.printStackTrace();
         }
         
+        File outF = new File(outPath);
+        if (!outF.exists()) outF.mkdirs();
         boolean isClose = false;
         for(int i=0; i< fileList.length ; i++){
             try {

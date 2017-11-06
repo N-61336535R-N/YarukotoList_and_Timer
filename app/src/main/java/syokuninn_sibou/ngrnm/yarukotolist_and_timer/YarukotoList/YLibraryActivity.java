@@ -10,6 +10,7 @@ import android.support.annotation.LayoutRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -68,21 +69,7 @@ public abstract class YLibraryActivity extends YActivity {
     
         registerForContextMenu(getAdptrView());
     
-    
-    
-        //リスト項目が選択された時のイベントを追加
-        getAdptrView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String msg = position + "番目のアイテムがクリックされました";
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-            
-                // やることリストの項目一覧画面に移動
-                Consts.listName = getLibC().getNames().get(position);
-                Intent intent = new Intent(getThisActivity(), YItemsActivity.class);
-                startActivity(intent);
-            }
-        });
-    
+        
     
     
     
@@ -210,5 +197,15 @@ public abstract class YLibraryActivity extends YActivity {
     
     
     
-    
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Consts.outLibrary();
+            if (Consts.hierarchy>0) Consts.hierarchy--;
+            if (Consts.hierarchy != Consts.libraryName.size()) {
+                throw new AssertionError("階層がズレています");
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

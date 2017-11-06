@@ -21,7 +21,6 @@ public class MainActivity extends Activity {
     
         /* ルートフォルダを、Consts に登録 */
         Consts.rootPath = getApplicationContext().getFilesDir().getPath() + "/";
-        Consts.libraryRootPath = Consts.rootPath + "YList/";
         // DirFile の初期化（ルートディレクトリの設定）
         DirFile.setDirFile(Consts.rootPath);
     

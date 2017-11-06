@@ -22,6 +22,7 @@ import de.timroes.android.listview.EnhancedListView;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.R;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Items.ItemsChecker;
 import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.Consts;
+import syokuninn_sibou.ngrnm.yarukotolist_and_timer.YarukotoList.Library.LibraryChecker;
 
 /**
  *  ＜＜＜＜＜〜〜〜〜〜  やることリストの内容(Item)一覧  〜〜〜〜〜＞＞＞＞＞
@@ -67,6 +68,9 @@ public class YItemsActivity extends YActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_yitems);
+    
+        // 多分、これで行ける。
+        setInstance(this);
     
         // 初期値読み込み
         ItC = new ItemsChecker("list");  // リスト内容

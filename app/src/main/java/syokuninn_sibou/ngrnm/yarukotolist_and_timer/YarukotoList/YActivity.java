@@ -51,11 +51,11 @@ public abstract class YActivity extends AppCompatActivity {
                     editView.setInputType(InputType.TYPE_CLASS_TEXT);
                     AlertDialog.Builder ADBuilder
                             = new AlertDialog.Builder(this)
-                            .setTitle("新しい項目の名前を入力")
+                            .setTitle("名前を入力")
                             .setView(editView)
                             .setNegativeButton("キャンセル", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    // Okボタンを押した時の処理。何もしないver
+                                    // キャンセルボタンを押した時の処理。何もしないver
                                 }
                             });
                     // OKボタンの設定
@@ -113,5 +113,6 @@ public abstract class YActivity extends AppCompatActivity {
         getLibC().remove(posi);
     }
     protected abstract void updateList();
+    
     
 }

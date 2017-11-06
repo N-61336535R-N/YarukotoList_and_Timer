@@ -58,7 +58,10 @@
             android:name=".Settings.SettingMoldActivity"
             android:label="[設定カテゴリ名]" >
         </activity>
-        
+        <activity
+            android:name=".Database.DatabaseEx"
+            android:label="データベースのテスト" >
+        </activity>        
     </application>
 
 </manifest>

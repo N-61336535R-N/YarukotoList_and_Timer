@@ -47,7 +47,7 @@ public class ItemsChecker extends Checker {
     
     @Override
     protected void determPath(String mode) {
-        kPath = Consts.libraryRootPath + Consts.combinePath(libraryName) + Consts.listName + "/";
+        kPath = Consts.rootPath + Consts.combinePath(libraryName) + Consts.listName + "/";
         // 「やったことリスト」の保存場所は、それぞれの Items のディレクトリの中の「fin」ディレクトリの中
         if (mode.equals("finish")) {
             kPath += "fin/";

@@ -50,7 +50,7 @@ public class ImageArrayAdapter extends ArrayAdapter<ViewData> {
         switch ( imgPath ) {
             case "No_Image":
                 // アイコンをセット
-                appInfoImage.setImageResource(R.drawable.ic_dashboard_black_24dp);
+                appInfoImage.setImageResource(R.drawable.directory_icon);
                 break;
             default:
                 // 画像をセット
