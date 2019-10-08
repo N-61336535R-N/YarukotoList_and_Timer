@@ -63,8 +63,8 @@ public class YListerActivity extends YLibraryActivity {
         //リスト項目が選択された時のイベントを追加
         getAdptrView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String msg = position + "番目のアイテムがクリックされました";
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                //String msg = position + "番目のアイテムがクリックされました";
+                //Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
             
                 // やることリストの項目一覧画面に移動
                 Consts.listName = getLibC().getNames().get(position);

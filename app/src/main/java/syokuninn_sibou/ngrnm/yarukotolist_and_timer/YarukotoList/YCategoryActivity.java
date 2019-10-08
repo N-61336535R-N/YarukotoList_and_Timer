@@ -81,8 +81,8 @@ public class YCategoryActivity extends YLibraryActivity {
                 Consts.inLibrary( VDatas[position].getTitle() );
                 Consts.hierarchy++;
                 //ntent.putExtra("CategoryName", VDatas[position].title);
-                String msg = "Consts.libraryName.size()：" + Consts.libraryName.size();
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                //String msg = "Consts.libraryName.size()：" + Consts.libraryName.size();
+                //Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
     
                 startActivity(intent);
             }
